@@ -1,0 +1,14 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<p>
+Hallo!<br/>
+<br/>
+Vielen Dank für deine Einsendung! Du findest sie unter {{host}}/api/v1/propositions/proto/{{proto_proposition.pk}}/?format=json
+</p>
+
+<p>
+Solidarische Grüße,<br/>
+Friedrich
+</p>
+{% endblock %}

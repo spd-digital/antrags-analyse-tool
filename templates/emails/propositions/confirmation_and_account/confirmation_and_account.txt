@@ -1,0 +1,15 @@
+{% extends 'emails/base_email.txt' %}
+
+{% block content %}
+Hallo!
+
+Vielen Dank für deine Einsendung! Du findest sie unter {{host}}/api/v1/proto_propositions/{{proto_proposition.pk}}/?format=json
+
+Außerdem haben wir ein Benutzerkonto für dich eingerichtet.
+
+Benutzername: {{user_account.user.username}}
+Passwort: {{password}}
+
+Solidarische Grüße,
+Friedrich
+{% endblock %}

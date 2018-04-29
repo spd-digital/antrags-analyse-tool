@@ -1,0 +1,10 @@
+*~
+*.pyc
+venv/
+.idea/
+
+.tmp/*
+!.tmp/.keep
+.env
+
+setup_env
