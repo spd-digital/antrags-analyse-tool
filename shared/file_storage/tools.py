@@ -19,14 +19,14 @@ class StorageEngineNotSupportedError(AssertionError):
 def put_file(*args, **kwargs):
     storage_engine_key = settings.STORAGE_ENGINE
     if storage_engine_key not in STORAGE_ENGINES:
-        raise StorageEngineNotSupportedError(u'the storage engine {} is not supported')
+        raise StorageEngineNotSupportedError(u'the storage engine {} is not supported'.format(storage_engine_key))
     return STORAGE_ENGINES[settings.STORAGE_ENGINE]().put(*args, **kwargs)
 
 
 def get_file(*args, **kwargs):
     storage_engine_key = settings.STORAGE_ENGINE
     if storage_engine_key not in STORAGE_ENGINES:
-        raise StorageEngineNotSupportedError(u'the storage engine {} is not supported')
+        raise StorageEngineNotSupportedError(u'the storage engine {} is not supported'.format(storage_engine_key))
     return STORAGE_ENGINES[settings.STORAGE_ENGINE]().get(*args, **kwargs)
 
 

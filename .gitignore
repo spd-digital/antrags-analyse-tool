@@ -8,3 +8,5 @@ venv/
 .env
 
 setup_env
+
+.coverage

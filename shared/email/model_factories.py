@@ -11,6 +11,14 @@ class EmailAttachmentFactory(factory.DjangoModelFactory):
     file_reference = factory.SubFactory('shared.file_storage.model_factories.FileReferenceFactory')
 
 
+class EmailAddressFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = EmailAddress
+
+    name = u'Ferdinand Lassalle'
+    address = u'ferdinand@sozis4bismarck.de'
+
+
 class EmailAddressSenderFactory(factory.DjangoModelFactory):
     class Meta:
         model = EmailAddress

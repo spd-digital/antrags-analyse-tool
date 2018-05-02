@@ -1,11 +1,18 @@
-from unittest import TestCase
-
 from accounts.models import UserAccount
-from mock import patch
-from model_mommy import mommy
+from django.test.testcases import TestCase
+from mock import patch, MagicMock
 from propositions.models import ProtoProposition
-from propositions.processes.submit_by_email import submit_proposition_by_email
+from propositions.processes.submit_by_email import submit_proposition_by_email, submit_proposition_by_emails
 from shared.email.model_factories import EmailMessageFactory
+
+
+class TestSubmitPropositionByEmails(TestCase):
+
+    @patch('propositions.processes.submit_by_email.submit_proposition_by_email')
+    def test_submit_proposition_by_emails(self, mock_submit_proposition_by_email):
+        test_email_messages = [MagicMock(), MagicMock()]
+        submit_proposition_by_emails(test_email_messages)
+        self.assertEqual(len(mock_submit_proposition_by_email.mock_calls), 2)
 
 
 class TestSubmitPropositionByEmail(TestCase):

@@ -31,8 +31,7 @@ class AWSS3StorageEngine(StorageEngine):
         if len(file_name.split('.')) < 2:
             raise FilenameMissingExtensionError(file_name)
         file_extension = file_name.split('.')[-1]
-        from shared.file_storage.tools import generate_file_name
-        generated_file_name = generate_file_name(file_extension=file_extension)
+        generated_file_name = self._generate_file_name(file_extension=file_extension)
 
         key = os.path.join(os.path.dirname(destination_path), generated_file_name)
 
@@ -42,12 +41,12 @@ class AWSS3StorageEngine(StorageEngine):
 
         return file_name, os.path.join(settings.CDN_HOST, key)
 
-    def get(self, source_path, *args, **kwargs):
-        bucket_name = source_path.split(os.sep)[0]
-        key = os.sep.join(source_path.split(os.sep)[1:])
-
+    def get(self, key, *args, **kwargs):
+        bucket_name = kwargs.get('bucket_name', settings.AWS['s3']['buckets']['default']['name'])
         client = self.get_s3_client(bucket_name)
+        self._download_file(client, bucket_name, key)
 
+    def _download_file(self, client, bucket_name, key):
         with open(os.path.join(settings.BASE_DIR, '.tmp', key), 'wb') as data:
             client.download_fileobj(bucket_name, key, data)
 

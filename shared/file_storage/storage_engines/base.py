@@ -35,3 +35,7 @@ class StorageEngine(object):
         file_reference.status_changes.add(data_update)
 
         return file_reference
+
+    def _generate_file_name(self, file_extension=None):
+        from shared.file_storage.tools import generate_file_name
+        return generate_file_name(file_extension=file_extension)
