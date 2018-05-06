@@ -13,6 +13,14 @@ class CannotCreateAccountForExistingUserError(AssertionError):
 
 
 def get_account_by_email(email_address_string):
+    """Tries to retrieve the user account associated with a given email address.
+
+    Args:
+        email_address_string (unicode): an email address, ex: test@test.de
+
+    Returns (UserAccount): the database representation of the user's account.
+
+    """
     try:
         return UserAccount.objects.get(user__email=email_address_string)
     except UserAccount.DoesNotExist:
@@ -22,6 +30,14 @@ def get_account_by_email(email_address_string):
 
 @transaction.atomic
 def create_account_from_email_address(email_address):
+    """Creates an account from the information in a database representation of an email address.
+
+    Args:
+        email_address (EmailAddress): the database representation of an email address.
+
+    Returns:
+
+    """
     try:
         user = User.objects.get(email=email_address.address)
         raise CannotCreateAccountForExistingUserError(
@@ -47,4 +63,12 @@ def generate_password():
 
 
 def get_contact_email_from_user_account(user_account):
+    """Retrieve the email address string associated with a given user account.
+
+    Args:
+        user_account (UserAccount): the database representation of a user account.
+
+    Returns (unicode): the email address string associated with a Django user, ex: test@test.de
+
+    """
     return user_account.user.email

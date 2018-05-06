@@ -22,6 +22,7 @@ class AWSS3BucketConfigurationNotFoundError(AssertionError):
 
 
 class AWSS3StorageEngine(StorageEngine):
+    """Implementation for Amazon Web Services S3 storage."""
     storage_engine = 'aws_s3'
 
     def _put(self, destination_path, source_file, *args, **kwargs):

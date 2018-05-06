@@ -1,3 +1,5 @@
+"""Propositions API views."""
+
 import json
 
 from django.contrib.auth.models import AnonymousUser
@@ -16,6 +18,16 @@ class PropositionMailbox(APIView):
         return Response()
 
     def post(self, request, *args, **kwargs):
+        """Endpoint for Mandrill's inbound mail service.
+
+        Args:
+            request:
+            *args:
+            **kwargs:
+
+        Returns:
+
+        """
 
         # try to extract the sender email before any other processing so that we can give mail-based error feedback
         sender_emails = get_sender_emails(request.data)
@@ -35,12 +47,22 @@ class PropositionMailbox(APIView):
 
 
 class ProtoPropositionListView(ListAPIView):
+    """Endpoint returning a list of proto propositions."""
     queryset = ProtoProposition.objects.all()
     serializer_class = ProtoPropositionFullDetailSerializer
 
 
 class ProtoPropositionDetailView(APIView):
     def get(self, request, pk=None):
+        """Endpoint returning information about an individual proto proposition.
+
+        Args:
+            request:
+            pk:
+
+        Returns:
+
+        """
         if not pk:
             raise ParseError(detail=u'no primary key provided')
         try:

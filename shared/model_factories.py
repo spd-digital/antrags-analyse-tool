@@ -1,3 +1,5 @@
+"""Factories for generic shared models."""
+
 import arrow
 import factory
 from django.contrib.auth.models import User
@@ -5,6 +7,8 @@ from shared.models import DataUpdate
 
 
 class UserFactory(factory.DjangoModelFactory):
+    """Factory for a standard Django user."""
+
     class Meta:
         model = User
 
@@ -18,6 +22,8 @@ class UserFactory(factory.DjangoModelFactory):
 
 
 class DataUpdateFactory(factory.DjangoModelFactory):
+    """Factory for a generic status update."""
+
     class Meta:
         model = DataUpdate
 

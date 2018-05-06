@@ -1,3 +1,5 @@
+"""Script for downloading a file from storage."""
+
 import django
 import sys
 

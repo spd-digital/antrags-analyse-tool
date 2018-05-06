@@ -9,6 +9,7 @@ class ProtoPropositionSerializer(serializers.Serializer):
 
 
 class ProtoPropositionFullDetailSerializer(serializers.Serializer):
+    """Serializes the full content of a proto proposition, including potentially sensitive information."""
     id = serializers.IntegerField()
     email_message = EmailMessageFullDetailSerializer()
 

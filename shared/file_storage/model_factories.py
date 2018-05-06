@@ -4,6 +4,7 @@ from shared.model_factories import DataUpdateFactory
 
 
 class FileReferenceFactory(factory.DjangoModelFactory):
+    """Factory for a generic file stored in AWS S3 storage."""
     class Meta:
         model = FileReference
 

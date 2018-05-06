@@ -38,6 +38,7 @@ class EmailAttachmentSerializer(serializers.Serializer):
 
 
 class EmailMessageFullDetailSerializer(serializers.Serializer):
+    """Serializes the full content of an email message, including potentially sensitive information."""
     id = serializers.IntegerField()
 
     sender = EmailAddressSerializer()

@@ -17,6 +17,7 @@ VALID_ATTACHMENT_FILETYPES = {
 }
 
 class InvalidAttachmentFileTypeError(AssertionError):
+    """Thrown when trying to process a file as an attachment whose file type is not supported."""
     def __init__(self, mime_type):
         self.mime_type = mime_type
         supported_mime_type_string = u', '.join(VALID_ATTACHMENT_FILETYPES.keys())
@@ -27,6 +28,17 @@ class InvalidAttachmentFileTypeError(AssertionError):
 
 
 def get_sender_emails(data):
+    """Tries to examine a Mandrill transmission and collect the sender email addresses of all email events contained.
+
+    Mandrill may send us n emails at once, grouped in a single transmission. This function extracts the sending email
+    addresses for each of those emails and returns them as a single unicode list.
+
+    Args:
+        data (json): a complete Mandrill transmission with (potentially) multiple email events
+
+    Returns (list): a unicode list of all the sender email addresses in the transmission.
+
+    """
     if 'mandrill_events' not in data:
         raise ValueError(u'invalid data')
     try:
@@ -39,6 +51,15 @@ def get_sender_emails(data):
 
 @transaction.atomic
 def save_raw_email_message(data, agent=None):
+    """Persists the raw unicode content of an email.
+
+    Args:
+        data (unicode): the raw unicode content of the Email
+        agent (User): the Django user who triggered this action.
+
+    Returns (FileReference): a database reference to the persisted email content.
+
+    """
     content = convert_string_content_to_stream(data)
     datetime_string = arrow.utcnow().format('YYYY-MM-DD_HH-mm-ss')
     return put_file(
@@ -47,6 +68,18 @@ def save_raw_email_message(data, agent=None):
 
 @transaction.atomic
 def persist_email_messages(json_data):
+    """Persists the information of a Mandrill transmission.
+
+    Mandrill may send us n emails at once, grouped in a single transmission. This function persists all the events
+    contained in such a transmission.
+
+    Args:
+        json_data (json): Mandrill's JSON representation of the entire transmission.
+
+    Returns (list): a list of database representations of Mandrill email events.
+
+    """
+
     transmission = MandrillTransmissionWrapper(json_data)
     email_messages = []
     for event in transmission.events:
@@ -56,6 +89,15 @@ def persist_email_messages(json_data):
 
 @transaction.atomic
 def persist_event(event):
+    """Persists the information of a single Mandrill email event.
+
+    Args:
+        event (MandrillEventWrapper): a single Mandrill email event, wrapped
+
+    Returns (EmailMessage): the database representation of a single Mandrill email event.
+
+    """
+
     email_address_sender = get_or_create_email_address(event.from_email, event.from_name)
 
     fields = {
@@ -78,6 +120,16 @@ def persist_event(event):
 
 @transaction.atomic
 def persist_attachments(email_message, attachments):
+    """
+
+    Args:
+        email_message (EmailMessage): the database representation of an email.
+        attachments (list): a list of MandrillAttachmentWrapper instances
+
+    Returns:
+
+    """
+
     persisted_attachments = []
     for attachment in attachments:
         try:

@@ -4,6 +4,7 @@ from shared.email.model_factories import EmailMessageFactory
 
 
 class ProtoPropositionFactory(factory.DjangoModelFactory):
+    """Factory for a generic proto proposition."""
     class Meta:
         model = ProtoProposition
 

@@ -3,6 +3,8 @@ from django.contrib.gis.db import models
 
 
 class DataUpdate(models.Model):
+    """A generic status update."""
+
     agent = models.ForeignKey(User)
     timestamp = models.DateTimeField()
 

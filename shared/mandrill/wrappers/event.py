@@ -6,6 +6,7 @@ class MsgKeyMissingError(AssertionError):
 
 
 class MandrillEventWrapper(object):
+    """Convenience wrapper around the JSON representation of a single email event in Mandrill POST data."""
 
     def __init__(self, event_json):
         self.event_json = event_json
@@ -42,6 +43,14 @@ class MandrillEventWrapper(object):
 
 
 def extract_attachments(attachment_json):
+    """
+
+    Args:
+        attachment_json (json):
+
+    Returns (list): list of MandrillAttachmentWrapper instances
+
+    """
     attachments = []
 
     for file_name, file_data in attachment_json.items():

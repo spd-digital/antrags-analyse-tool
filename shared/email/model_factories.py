@@ -4,6 +4,7 @@ from shared.file_storage.model_factories import FileReferenceFactory
 
 
 class EmailAttachmentFactory(factory.DjangoModelFactory):
+    """Factory for a generic email attachment."""
     class Meta:
         model = EmailAttachment
 
@@ -12,6 +13,7 @@ class EmailAttachmentFactory(factory.DjangoModelFactory):
 
 
 class EmailAddressFactory(factory.DjangoModelFactory):
+    """Factory for a generic email address."""
     class Meta:
         model = EmailAddress
 
@@ -20,6 +22,7 @@ class EmailAddressFactory(factory.DjangoModelFactory):
 
 
 class EmailAddressSenderFactory(factory.DjangoModelFactory):
+    """Factory for a sender email address."""
     class Meta:
         model = EmailAddress
 
@@ -28,6 +31,7 @@ class EmailAddressSenderFactory(factory.DjangoModelFactory):
 
 
 class EmailAddressRecipientFactory(factory.DjangoModelFactory):
+    """Factory for a recipient email address."""
     class Meta:
         model = EmailAddress
 
@@ -36,6 +40,7 @@ class EmailAddressRecipientFactory(factory.DjangoModelFactory):
 
 
 class EmailMessageFactory(factory.DjangoModelFactory):
+    """Factory for an email message."""
     class Meta:
         model = EmailMessage
 
@@ -48,6 +53,7 @@ class EmailMessageFactory(factory.DjangoModelFactory):
 
     @factory.post_generation
     def recipients(self, create, extracted, **kwargs):
+        """Adds a recipient to the email message."""
         if not create:
             return
 

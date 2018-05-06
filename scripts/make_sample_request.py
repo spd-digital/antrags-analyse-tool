@@ -1,3 +1,5 @@
+"""Script for faking a POST request to the incoming mail endpoint."""
+
 import json
 
 import os

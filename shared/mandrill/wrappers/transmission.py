@@ -12,6 +12,8 @@ class NotADictionaryError(AssertionError):
 
 
 class MandrillTransmissionWrapper(object):
+    """A thin wrapper around a Mandrill transmission."""
+
     def __init__(self, json_source):
         self.json_source = json_source
 
@@ -19,6 +21,15 @@ class MandrillTransmissionWrapper(object):
 
 
 def extract_events(json_source):
+    """Isolate the individual email events in a Mandrill transmission, wrap them and return them as a list.
+
+    Args:
+        json_source (json): the full Mandrill transmission.
+
+    Returns (list): a list of MandrillEventWrapper instances
+
+    """
+
     if not isinstance(json_source, dict):
         raise NotADictionaryError(u'data must be a dictionary')
     if not 'mandrill_events' in json_source:

@@ -1,3 +1,5 @@
+"""Script for uploading a file to storage."""
+
 import django
 import sys
 

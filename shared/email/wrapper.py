@@ -12,6 +12,7 @@ class CannotSendEmailsOutsideProductionEnvironmentError(AssertionError):
 
 
 class EmailWrapper(object):
+    """Generic wrapper for email sending functionality."""
     source = None
     subject = None
 
@@ -20,6 +21,16 @@ class EmailWrapper(object):
         self.kwargs = kwargs
 
     def send(self, recipients=None, cc=None, bcc=None):
+        """Send an email.
+
+        Args:
+            recipients (list): unicode list of recipient email addresses.
+            cc (list): unicode list of CC recipient email addresses.
+            bcc (list): unicode list of BCC recipient email addresses.
+
+        Returns:
+
+        """
         sender = self.get_from() or settings.DEFAULT_EMAIL_SENDER
 
         recipients = recipients or self.kwargs.get('recipients') or self.get_to()
@@ -47,6 +58,7 @@ class EmailWrapper(object):
     def send_email_message(
             self, subject=None, text=None, html=None, from_email=None, to=None, cc=None, bcc=None, attachments=None,
             connection=None, headers=None, alternatives=None, reply_to=None, fail_silently=False):
+        """Calls Django's built-in send mail functionality."""
 
         if not settings.PRODUCTION:
             raise CannotSendEmailsOutsideProductionEnvironmentError()

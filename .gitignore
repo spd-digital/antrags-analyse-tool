@@ -10,3 +10,4 @@ venv/
 setup_env
 
 .coverage
+/docs/build/

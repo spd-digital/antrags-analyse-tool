@@ -5,3 +5,5 @@ mock==2.0.0
 model_mommy==1.5.1
 pydevd==1.1.1
 requests==2.18.4
+Sphinx==1.7.4
+sphinx_rtd_theme==0.3.1
