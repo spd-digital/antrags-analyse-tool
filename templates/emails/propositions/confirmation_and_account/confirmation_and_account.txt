@@ -1,0 +1,14 @@
+{% extends 'emails/base_email.txt' %}
+
+{% block content %}
+[Gruß]
+
+[Verweis auf Antragsentwurf] {{host}}/api/v1/proto_propositions/{{proto_proposition.pk}}/?format=json
+
+[Verweis auf Benutzer*innenkonto]
+
+Benutzername: {{user_account.user.username}}
+Passwort: {{password}}
+
+[Unterschrift]
+{% endblock %}

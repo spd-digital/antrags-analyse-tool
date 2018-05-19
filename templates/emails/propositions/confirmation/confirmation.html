@@ -1,0 +1,13 @@
+{% extends 'emails/base_email.html' %}
+
+{% block content %}
+<p>
+[Gruß]<br/>
+<br/>
+[Verweis auf Antragsentwurf] {{host}}/api/v1/propositions/proto/{{proto_proposition.pk}}/?format=json
+</p>
+
+<p>
+[Unterschrift]
+</p>
+{% endblock %}

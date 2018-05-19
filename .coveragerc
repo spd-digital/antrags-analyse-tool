@@ -1,0 +1,6 @@
+[run]
+branch = True
+
+[report]
+omit = venv/*
+show_missing = True
