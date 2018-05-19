@@ -34,18 +34,21 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 # Application definition
 
-INSTALLED_APPS = [
+INSTALLED_APPS_DJANGO = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+]
 
+INSTALLED_APPS_THIRD_PARTY = [
     'django_nose',
-
     'rest_framework',
+]
 
+INSTALLED_APPS_CUSTOM = [
     'shared.email',
     'shared.file_storage',
     'shared',
@@ -53,6 +56,8 @@ INSTALLED_APPS = [
     'propositions',
     'api',
 ]
+
+INSTALLED_APPS = INSTALLED_APPS_DJANGO + INSTALLED_APPS_THIRD_PARTY + INSTALLED_APPS_CUSTOM
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -146,6 +151,9 @@ REST_FRAMEWORK = {
 }
 
 STORAGE_ENGINE = os.environ.get('STORAGE_ENGINE', 'local_fs')
+if STORAGE_ENGINE == 'local_fs':
+    LOCAL_STORAGE_PATH = os.environ.get('LOCAL_STORAGE_PATH')
+    STATICFILES_DIRS = (os.environ.get('STATIC_ROOT', os.path.join(LOCAL_STORAGE_PATH, 'static')),)
 
 AWS = {
     's3': {
@@ -175,6 +183,10 @@ CDN_HOST = u'https://{bucket_name}'.format(**{
     'bucket_name': os.environ.get('AWS_S3_BUCKET_DEFAULT_NAME')
 })
 
+if not os.environ.get('SEND_EMAILS') == 'true':
+    EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+    EMAIL_FILE_PATH = os.environ.get('EMAIL_FILE_PATH', os.path.join(BASE_DIR, '.tmp/emails'))
+
 DEFAULT_EMAIL_SENDER = os.environ.get('DEFAULT_EMAIL_SENDER')
 EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
@@ -184,3 +196,8 @@ EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS') == u'true'
 
 PRODUCTION_HOSTNAME = os.environ.get('PRODUCTION_HOSTNAME')
 PRODUCTION = PRODUCTION_HOSTNAME == os.environ.get('PRODUCTION_HOSTNAME')
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package={}'.format(','.join(INSTALLED_APPS_CUSTOM)),
+]

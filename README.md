@@ -126,11 +126,18 @@ Django [stores database modifcations as files called "migrations"](https://docs.
     source /op/venvs/aat/bin/activate
     python manage.py migrate
 
+#### run tests
+we use [nose](https://github.com/django-nose/django-nose) and [coverage](https://coverage.readthedocs.io/en/coverage-4.5.1/) for better tests and a code coverage report. To test the code, simply use:
+
+    cd /opt/aat
+    source /opt/venvs/aat/bin/activate
+    python manage.py test
+
 #### start the platform
 you should now be able to start [Django's built-in development server](https://docs.djangoproject.com/en/2.0/intro/tutorial01/#the-development-server).
 
     cd /opt/aat
-    source /op/venvs/aat/bin/activate
+    source /opt/venvs/aat/bin/activate
     python manage.py runserver
 
 the platform should now be running and available. It will restart whenever you modify the source code.

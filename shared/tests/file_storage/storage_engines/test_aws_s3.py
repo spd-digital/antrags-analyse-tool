@@ -38,12 +38,13 @@ class TestAWSS3StorageEngine(TestCase):
         self.assertDictEqual(mock_get_s3_client.mock_calls[1][2], {
             'Body': mock_source_file,
             'Bucket': u'test.cdn.host',
-            'Key': u'some/directory/ABC123.pdf'
+            'Key': u'some/directory/ABC123.pdf',
+            'Metadata': {'mime_type': u'application/pdf'}
         })
         self.assertDictEqual(mock_get_s3_client.mock_calls[2][2], {
             'ACL': u'public-read',
             'Bucket': u'test.cdn.host',
-            'Key': u'some/directory/ABC123.pdf'
+            'Key': u'some/directory/ABC123.pdf',
         })
 
         self.assertEqual(file_reference.file_name, u'document.pdf')

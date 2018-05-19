@@ -13,4 +13,12 @@ class TestMandrillEvents(TestCase):
             self.json_source = json.loads(f.read())
 
     def test_mandrill_events(self):
-        MandrillTransmissionWrapper(self.json_source)
+        actual_wrapper = MandrillTransmissionWrapper(self.json_source)
+
+        self.assertEqual(len(actual_wrapper.events), 1)
+
+        self.assertEqual(actual_wrapper.events[0].email, u'antrag@antraege.rotefabrik.de')
+
+        self.assertEqual(len(actual_wrapper.events[0].attachments), 1)
+
+        self.assertEqual(actual_wrapper.events[0].attachments[0].file_name, u'180409_Leitantrag.pdf')

@@ -1,15 +1,14 @@
 {% extends 'emails/base_email.txt' %}
 
 {% block content %}
-Hallo!
+[Gruß]
 
-Vielen Dank für deine Einsendung! Du findest sie unter {{host}}/api/v1/proto_propositions/{{proto_proposition.pk}}/?format=json
+[Verweis auf Antragsentwurf] {{host}}/api/v1/proto_propositions/{{proto_proposition.pk}}/?format=json
 
-Außerdem haben wir ein Benutzerkonto für dich eingerichtet.
+[Verweis auf Benutzer*innenkonto]
 
 Benutzername: {{user_account.user.username}}
 Passwort: {{password}}
 
-Solidarische Grüße,
-Friedrich
+[Unterschrift]
 {% endblock %}

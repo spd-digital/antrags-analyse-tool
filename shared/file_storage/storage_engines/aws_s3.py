@@ -3,8 +3,6 @@ import os
 
 from django.conf import settings
 from shared.file_storage.storage_engines.base import StorageEngine
-from shared.file_storage.storage_engines.exceptions import FilenameMissingExtensionError
-
 
 ACL_PRIVATE = u'private'
 ACL_PUBLIC_READ = u'public-read'
@@ -29,15 +27,21 @@ class AWSS3StorageEngine(StorageEngine):
         bucket_name = kwargs.get('bucket_name', settings.AWS['s3']['buckets']['default']['name'])
         file_name = os.path.basename(destination_path)
 
-        if len(file_name.split('.')) < 2:
-            raise FilenameMissingExtensionError(file_name)
+        from shared.file_storage.tools import assert_file_name_has_extension
+        assert_file_name_has_extension(file_name)
+
         file_extension = file_name.split('.')[-1]
         generated_file_name = self._generate_file_name(file_extension=file_extension)
 
         key = os.path.join(os.path.dirname(destination_path), generated_file_name)
 
+        meta_data = {}
+        from shared.file_storage.tools import get_mime_type_for_file_extension
+        if get_mime_type_for_file_extension(file_extension.lower()):
+            meta_data['mime_type'] = get_mime_type_for_file_extension(file_extension.lower())
+
         client = self.get_s3_client(bucket_name)
-        client.put_object(Body=source_file, Bucket=bucket_name, Key=key)
+        client.put_object(Body=source_file, Bucket=bucket_name, Key=key, Metadata=meta_data)
         client.put_object_acl(ACL=ACL_PUBLIC_READ, Bucket=bucket_name, Key=key)
 
         return file_name, os.path.join(settings.CDN_HOST, key)

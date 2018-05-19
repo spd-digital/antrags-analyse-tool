@@ -43,7 +43,7 @@ def get_sender_emails(data):
         raise ValueError(u'invalid data')
     try:
         mandrill_events = json.loads(data.get('mandrill_events'))
-    except ValueError as e:
+    except (ValueError, TypeError) as e:
         raise ValueError(u'mandrill events not supplied as valid JSON')
 
     return [mandrill_event['msg']['email'] for mandrill_event in mandrill_events]
@@ -98,7 +98,7 @@ def persist_event(event):
 
     """
 
-    email_address_sender = get_or_create_email_address(event.from_email, event.from_name)
+    email_address_sender = get_or_create_email_address(event.from_email, email_name=event.from_name)
 
     fields = {
         'sender': email_address_sender,

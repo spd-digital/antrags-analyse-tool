@@ -3,8 +3,11 @@ from django.test import TestCase
 from django.test.utils import override_settings, tag
 from mock import patch
 from mock.mock import MagicMock
+from nose_parameterized import parameterized
 from shared.file_storage import tools
-from shared.file_storage.tools import StorageEngineNotSupportedError, generate_file_name
+from shared.file_storage.storage_engines.exceptions import FilenameMissingExtensionError
+from shared.file_storage.tools import StorageEngineNotSupportedError, generate_file_name, \
+    get_mime_type_for_file_extension, assert_file_name_has_extension
 
 
 class TestPutFile(TestCase):
@@ -84,3 +87,36 @@ class TestGenerateFileName(TestCase):
         mock_generate_random_string.return_value = u'ABC123'
         generated_file_name = generate_file_name(file_extension=u'pdf')
         self.assertEqual(generated_file_name, u'ABC123.pdf')
+
+
+class TestGetMimeTypeForFileExtension(TestCase):
+
+    @parameterized.expand([
+        ('doc', u'application/msword'),
+        ('docx', u'application/vnd.openxmlformats-officedocument.wordprocessingml.document'),
+        ('html', u'text/html'),
+        ('odt', u'application/vnd.oasis.opendocument.text'),
+        ('pdf', u'application/pdf'),
+        ('txt', u'text/plain')
+    ])
+    def test_get_mime_type_for_file_extension(self, test_file_extension, expected_mime_type):
+        self.assertEqual(get_mime_type_for_file_extension(test_file_extension), expected_mime_type)
+
+
+class TestAssertFileNameHasExtension(TestCase):
+
+    @parameterized.expand([
+        ('myfile', False),
+        ('myfile.txt', True),
+        ('myfile.backup.txt', True)
+    ])
+    def test_assert_file_name_has_extension_true(self, test_file_name, test_file_name_has_extension):
+        if test_file_name_has_extension:
+            try:
+                assert_file_name_has_extension(test_file_name)
+            except FilenameMissingExtensionError:
+                raise AssertionError(
+                    u'expected file name to be recognized as having a file extension: {}'.format(test_file_name))
+        else:
+            with self.assertRaises(FilenameMissingExtensionError):
+                assert_file_name_has_extension(test_file_name)
